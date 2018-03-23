@@ -1,0 +1,1 @@
+/agnentro/tmp/agnentroscan i new/signal.dat 10 5000 1 3

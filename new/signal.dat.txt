@@ -1,0 +1,2 @@
+ERROR: All (haystack) files contain fewer masks than sweep would require.
+ERROR: All (haystack) files contain fewer masks than sweep would require.

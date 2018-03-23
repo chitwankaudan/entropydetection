@@ -1,0 +1,21 @@
+##Attempted 1: Trying to replace scan.py w/ make commands
+#all : haystacks/*.dat
+#~/yourpath1/agnentro/tmp/agnentroscan i ~/yourpath2/signal.dat 10 5000 1 3
+#$(filter-out %_output.fasta,$(wildcard *.fasta))
+
+# all: $(wildcard haystacks/*.dat)
+# haystacks/%.txt: haystacks/%.dat
+# 	./agnentro/agnentroscan i $< 10 5000 1 3 >> $@
+
+# .PHONY : scan
+# scan : $(TXT_FILES)
+# 	@echo TXT_FILES: $(TXT_FILES)
+# 	@echo DAT_FILES: $(DAT_FILES)
+# haystacks/%.txt : haystacks/%.dat
+# 	./agnentro/tmp/agnentroscan i $< 10 5000 1 3 >> $@
+
+# .PHONY : scan
+# scan : haystacks/2018-03-17_14\:45\:08.409438_\[1\].txt
+# 	@echo FILE: $<
+#haystacks/2018-03-17_14\:45\:08.409438_\[1\].txt : haystacks/2018-03-17_14\:45\:08.409438_\[1\].dat
+	#./agnentro/tmp/agnentroscan i $< 10 5000 1 3 >> $@
