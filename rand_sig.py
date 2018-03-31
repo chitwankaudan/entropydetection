@@ -9,10 +9,6 @@ def rand_sig(n, sigma, dSNR, NeedleSize, HstackSize, NeedleType):
         #Create dSNR and sigma arrays
         arr_dSNR = np.repeat(dSNR, n)
         arr_sigma = np.repeat(sigma, n)
-
-        #Defining/computing variables
-        
-        #sigma = 100*pow(3+pow(10,arr_dSNR/20.), -1)
         
         #Initialize haystack w/ noise
         haystack = np.random.normal(0, arr_sigma, size=(HstackSize, n))
