@@ -1,2 +1,0 @@
-,dSNR,HstackSize,NeedleSize,NeedleType,StartSam,result
-1,-30.236528831502945,1000000,250000,sine,283359,4
