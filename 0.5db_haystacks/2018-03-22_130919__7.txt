@@ -1,6 +1,0 @@
-sigma,24.6350700819
-dSNR,0.5
-HstackSize,1000000
-NeedleSize,250000
-NeedleType,sine
-StartSam,578948

@@ -73,7 +73,7 @@ else:
 	sys.exit()
 	
 totsig = noise + sig
-totsig = totsig.8
+totsig = totsig.astype(np.int8)
 
 output_file = open(sys.argv[6],"wb")
 np.save(output_file, totsig)

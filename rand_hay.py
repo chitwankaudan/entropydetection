@@ -28,17 +28,25 @@ class GenHstacks:
         if self.NeedleType == 'noise':
             #add 'noise' as NeedleType
             info['NeedleType'] = pd.Series(np.repeat('noise', self.n))
-        
         elif self.NeedleType == 'sine':
             #inject sinusodial and update haystack and info
-            needle = self.create_sin()
+            needle = self.create_sine()
+            haystack, info = self.inject_needle(needle, haystack, info)
+        elif self.NeedleType == 'chirp':
+            #inject linear chirp and update haystack and info
+            needle = self.create_chirp()
+            haystack, info = self.inject_needle(needle, haystack, info)
+        elif self.NeedleType == 'normnoise':
+            #define new instance variable sigma for normal noise computation
+            sigma = 100*pow(3+pow(10, self.dSNR[0] /20.),-1)
+            needle = self.create_normnoise(sigma)
             haystack, info = self.inject_needle(needle, haystack, info)
         else:
             pass
 
         self.save(haystack.astype(np.int8), info, self.out_path)
 
-    def create_sin(self):
+    def create_sine(self):
         #define time array (t)
         t = np.arange(self.NeedleSize).reshape(self.NeedleSize,1)
         #Randomly select save freq, phase. Compute amplitude.
@@ -48,6 +56,24 @@ class GenHstacks:
         
         #Create the sinusodial needle
         needle = amplitude * np.sin(2*np.pi*((np.matmul(t, rand_freq) + rand_phase)))
+        return needle
+
+    def create_chirp(self):
+        #define time array (t)
+        t = np.arange(self.NeedleSize).reshape(self.NeedleSize,1)
+        #Randomly select save freq, phase. Compute amplitude.
+        rand_freq1 = np.random.uniform(size=(1, self.n))
+        rand_freq2 = (pow(self.NeedleSize,-1)/2)*np.random.uniform(size=(1, self.n))
+        rand_phase = np.repeat([np.random.uniform(size=self.n)], self.NeedleSize).reshape(self.n,self.NeedleSize).T
+        amplitude = self.sigma*pow(10,self.dSNR/20)
+        
+        #Create the linear chirp needle
+        needle = amplitude * np.sin(2*np.pi*((np.matmul(t, rand_freq1) + (np.matmul(pow(t, 2), rand_freq2)) + rand_phase)))
+        return needle
+
+    def create_normnoise(self, sigma):
+        #Create the normal noise needle
+        needle = np.random.normal(0, sigma*pow(10, self.dSNR[0]/20), (self.NeedleSize, self.n))
         return needle
 
     def inject_needle(self, needle, noise, info):
@@ -63,7 +89,18 @@ class GenHstacks:
         
         #Add the needle to the haystack
         haystack = noise + needle_mask
-
+        #print("mask:", needle_mask, "\n")
+        #print("noise:", noise, "\n")
+        #print("haystack:", haystack)
+        """
+        print("haystack:", np.mean(np.power(haystack, 2)))
+        print("haystack float16:", np.mean(np.power(haystack.astype(np.float16), 2)))
+        print("haystack int8:", np.mean(np.power(haystack.astype(np.int8), 2)), '\n')
+        
+        print("noise:", np.mean(np.power(noise, 2)))
+        print("noise float16:", np.mean(np.power(noise.astype(np.float16), 2)))
+        print("noise int8:", np.mean(np.power(noise.astype(np.int8), 2)))
+		"""
         #Update info df with correct metadata
         info['dSNR'] = pd.Series(self.dSNR)
         info['NeedleSize'] = pd.Series(np.repeat(self.NeedleSize, self.n))
@@ -97,7 +134,7 @@ def main():
     startTime = datetime.now()
     parser = argparse.ArgumentParser(description='creates many haystack ')
     parser.add_argument('n', type=int, help='# of haystack you want to generate (int)')
-    parser.add_argument('NeedleType', choices=['sine', 'chirp', 'BPSK', 'BFSK', 'noise'], help='injected signal type {sine, chirp, BPSK, BFSK, noise}')
+    parser.add_argument('NeedleType', choices=['sine', 'chirp', 'BPSK', 'BFSK', 'noise', 'normnoise'], help='injected signal type {sine, chirp, BPSK, BFSK, noise}')
     parser.add_argument('--dSNR', type=float, help='# of samples each injected signal is (int)')
     parser.add_argument('--sigma', type=float, default=10.0, help='# variance of the noise; defaults to 10')
     parser.add_argument('--NeedleSize', type=int, default=250000, help='# of samples each injected signal is (int)')
