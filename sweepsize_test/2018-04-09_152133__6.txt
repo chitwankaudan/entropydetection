@@ -1,3 +1,0 @@
-sigma,10.0
-HstackSize,1000000
-NeedleType,noise

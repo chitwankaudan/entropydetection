@@ -12,16 +12,20 @@ def run_scan(datafiles, txtfiles, etype, geo, sweep, ranks, out_format, path):
     #initialize empty results df
     results = pd.DataFrame()
     for data, txt in zip(datafiles, txtfiles):
-        #add entropy output from entropy detection method
-        output = run(["agnentro/tmp/agnentroscan", etype, data, str(geo), str(sweep), str(ranks), str(out_format)], stdout=PIPE)
+        #We'll be saving entorpy and power detection results in each signal's csv
+        #Later we will aggregate all csvs into results df
+        #Bet's begin by reading in csv
         m = pd.read_csv(txt, squeeze=True, header=None, index_col=0)
         m['file_name'] = np.str(txt)
-        m['entropy_hex'] = str(output.stdout[0:16])
-        m['start_window'] = str(output.stdout[17:33])
-        
+
         #add energy output from power detection method
         haystack = np.load(data)
-        m['avg_energy'] = np.mean(np.power(haystack,2))
+        m['energy'] = np.mean(np.power(haystack,2))
+
+        #add entropy output from entropy detection method
+        output = run(["agnentro/tmp/agnentroscan", etype, data, str(geo), str(sweep), str(ranks), str(out_format)], stdout=PIPE)
+        m['entropy_hex'] = str(output.stdout[0:16])
+        m['start_window'] = str(output.stdout[17:33])
 
         #append to results df
         results = results.append(m)

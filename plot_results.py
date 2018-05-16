@@ -41,19 +41,6 @@ def plot_entropies(path, etype, needletype):
     ax4.hist(noise, bins=bins, color='orange')
     ax4.set_title('Norm entropy noise')
 
-    # fig, ax = plt.subplots(1, 3, figsize=(15, 5))
-
-    # results.groupby('NeedleType')['norm_entropy'].plot(kind='kde', ax=ax[0], legend=True)
-    # ax[0].set_xlabel('normalized entropy [0-1]')
-    # ax[0].set_title('KDE of sine and noise')
-
-    # ax[1].hist(results.loc[results['NeedleType'] == 'sine', 'norm_entropy'], bins=50, color='g')
-    # ax[1].set_xlabel('normalized entropy [0-1]')
-    # ax[1].set_title('Entropy Distr. (Sine)')
-
-    # ax[2].hist(results.loc[results['NeedleType'] == 'noise', 'norm_entropy'], bins=50, color='b')
-    # ax[2].set_xlabel('normalized entropy [0-1]')
-    # ax[2].set_title('Entropy Distr. (Noise)')
     dSNR = results['dSNR'].mean(skipna=True)
     title_str = str(dSNR) + 'db' + '_' + str(needle.count() + noise.count()) + 'haystacks'
     fig.suptitle(title_str)

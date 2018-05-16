@@ -1,6 +1,0 @@
-sigma,10.0
-HstackSize,1000000
-dSNR,10.0
-NeedleSize,250000
-NeedleType,chirp
-StartSam,211887

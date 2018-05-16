@@ -45,7 +45,16 @@ class GenHstacks:
             pass
 
         self.save(haystack.astype(np.int8), info, self.out_path)
-
+        """
+        # tmp saving formatting for power_detect test
+        info.to_csv(self.out_path + "_" + str(self.dSNR[0]) + "db" + '.txt')
+        np.save(self.out_path + "_" + str(self.dSNR[0]) + "db" + "_quantized_haystack", haystack.astype(np.int8))
+        np.save(self.out_path + "_" + str(self.dSNR[0]) + "db" + "_raw_noise", noise)
+        np.save(self.out_path + "_" + str(self.dSNR[0]) + "db" + "_quantized_noise", noise.astype(np.int8))
+        np.save(self.out_path + "_" + str(self.dSNR[0]) + "db" + "_raw_haystack", haystack)
+        np.save(self.out_path + "_" + str(self.dSNR[0]) + "db" + "_quantized_needle", needle.astype(np.int8))
+        np.save(self.out_path + "_" + str(self.dSNR[0]) + "db" + "_raw_needle", needle)
+        """
     def create_sine(self):
         #define time array (t)
         t = np.arange(self.NeedleSize).reshape(self.NeedleSize,1)
@@ -115,7 +124,7 @@ class GenHstacks:
             if p.exists():
                 pass
             else:
-                run(['mkdir','--', p])
+                run(['mkdir','-p', '--', p])
         
         else:
             p = Path(str(self.dSNR[0]) + 'db_' + str(self.sigma[0]) + 'sigma_haystacks/')
