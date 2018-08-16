@@ -1,11 +1,11 @@
 name: entropy
 
 dependencies:
-- python=3.6.1
-- ipython=5.3.0
-- numpy=1.13.3
-- pandas=0.22.0
-- scipy=1.0.0
+- python=3.6.*
+- ipython=6.2.*
+- numpy=1.14.*
+- pandas=0.23.*
+- scipy=1.1.*
 - matplotlib=2.0.2
 - pip:
   - watermark
